@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>McKinstrie Family Cruise Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #132240;
+    --navy-light: #1e3a5f;
+    --teal: #0d9488;
+    --teal-light: #14b8a6;
+    --gold: #f59e0b;
+    --gold-light: #fcd34d;
+    --white: #f8fafc;
+    --muted: #94a3b8;
+    --border: rgba(255,255,255,0.08);
+    --card: rgba(255,255,255,0.04);
+    --rc-blue: #1e6bb8;
+    --cel-purple: #7c3aed;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .hero {
+    background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #0a2840 100%);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 60% 40%, rgba(13,148,136,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 70%, rgba(245,158,11,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    text-align: center;
+  }
+  .hero-stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--teal-light);
+  }
+  .hero-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Main content */
+  .main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Filters */
+  .filters-section {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .filters-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    margin-bottom: 1rem;
+  }
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .filter-group label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+  }
+  select {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--white);
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+  }
+  select:focus { border-color: var(--teal); }
+  select option { background: #1e3a5f; color: var(--white); }
+
+  .sort-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .sort-label { font-size: 12px; color: var(--muted); }
+  .sort-btn {
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sort-btn:hover { border-color: var(--teal); color: var(--white); }
+  .sort-btn.active { background: var(--teal); border-color: var(--teal); color: white; font-weight: 500; }
+
+  /* Table */
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .results-count { font-size: 13px; color: var(--muted); }
+
+  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 820px; }
+  thead { background: var(--navy-mid); }
+  th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s;
+  }
+  th:hover { color: var(--teal-light); }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--white); }
+  tr:last-child td { border-bottom: none; }
+  tbody tr { background: var(--card); transition: background 0.15s; }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  tbody tr:hover { background: rgba(13,148,136,0.08); }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge-rc { background: rgba(30,107,184,0.2); color: #60a5fa; border: 1px solid rgba(30,107,184,0.3); }
+  .badge-cel { background: rgba(124,58,237,0.2); color: #c084fc; border: 1px solid rgba(124,58,237,0.3); }
+  .badge-family { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+  .badge-adults { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+  .badge-mixed { background: rgba(148,163,184,0.15); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.25); }
+  .tag { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.06); padding: 2px 7px; border-radius: 4px; }
+  .drive-tag { font-size: 11px; color: var(--teal-light); margin-left: 4px; }
+
+  /* Score bar */
+  .score-wrap { display: flex; align-items: center; gap: 8px; }
+  .score-bar { width: 50px; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; }
+  .score-fill { height: 100%; border-radius: 3px; }
+  .score-num { font-weight: 600; font-size: 14px; }
+
+  /* Year colors */
+  .year-new { color: #34d399; font-weight: 500; }
+  .year-mid { color: #60a5fa; }
+  .year-old { color: var(--muted); }
+
+  /* Notes tooltip */
+  td.notes-cell { max-width: 220px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* Footer */
+  .footnote {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .footnote strong { color: var(--white); font-weight: 500; }
+
+  .footer-bar {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 2rem 1rem 1.5rem; }
+    .main { padding: 1rem; }
+    .filters-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">McKinstrie Family</div>
+  <h1>Cruise <em>Planner</em></h1>
+  <p class="hero-sub">Royal Caribbean &amp; Celebrity — ranked by value, reviews, and family fit</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">22</div><div class="hero-stat-label">Ships Rated</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Home Ports</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">2026–27</div><div class="hero-stat-label">Season</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="filters-section">
+    <div class="filters-title">Filter &amp; Sort</div>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>Cruise Line</label>
+        <select id="fLine" onchange="render()">
+          <option value="">Both Lines</option>
+          <option value="Royal Caribbean">Royal Caribbean</option>
+          <option value="Celebrity">Celebrity</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Home Port</label>
+        <select id="fPort" onchange="render()">
+          <option value="">All Ports</option>
+          <option value="Galveston">Galveston, TX</option>
+          <option value="Miami">Miami, FL</option>
+          <option value="Fort Lauderdale">Fort Lauderdale, FL</option>
+          <option value="Port Canaveral">Port Canaveral, FL</option>
+          <option value="Cape Liberty">Cape Liberty, NJ</option>
+          <option value="Boston">Boston, MA</option>
+          <option value="Tampa">Tampa, FL</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Travel Type</label>
+        <select id="fKids" onchange="render()">
+          <option value="">All</option>
+          <option value="family">Family Friendly</option>
+          <option value="adults">Adults / Couples</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Trip Length</label>
+        <select id="fNights" onchange="render()">
+          <option value="">Any Length</option>
+          <option value="short">Short (2–5 nights)</option>
+          <option value="week">Week (6–8 nights)</option>
+          <option value="long">Extended (9+ nights)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Ship Class</label>
+        <select id="fClass" onchange="render()">
+          <option value="">All Classes</option>
+          <option value="Icon">Icon Class (RC)</option>
+          <option value="Oasis">Oasis Class (RC)</option>
+          <option value="Freedom">Freedom Class (RC)</option>
+          <option value="Quantum">Quantum Class (RC)</option>
+          <option value="Voyager">Voyager Class (RC)</option>
+          <option value="Edge">Edge Class (Celebrity)</option>
+          <option value="Solstice">Solstice Class (Celebrity)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Drive from Austin?</label>
+        <select id="fDrive" onchange="render()">
+          <option value="">All</option>
+          <option value="yes">Drive Only (Galveston)</option>
+          <option value="no">Flight Required</option>
+        </select>
+      </div>
+    </div>
+    <div class="sort-row">
+      <span class="sort-label">Sort:</span>
+      <button class="sort-btn active" onclick="setSort('value')" id="s-value">Value Score</button>
+      <button class="sort-btn" onclick="setSort('review')" id="s-review">Review</button>
+      <button class="sort-btn" onclick="setSort('age')" id="s-age">Ship Age</button>
+      <button class="sort-btn" onclick="setSort('kids')" id="s-kids">Kid Score</button>
+      <button class="sort-btn" onclick="setSort('price')" id="s-price">Nightly Rate</button>
+      <button class="sort-btn" onclick="setSort('nights')" id="s-nights">Nights</button>
+    </div>
+  </div>
+
+  <div class="table-header">
+    <div class="results-count" id="countLine"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th onclick="setSort('name')">Ship <span id="th-name"></span></th>
+          <th onclick="setSort('line')">Line <span id="th-line"></span></th>
+          <th onclick="setSort('class')">Class <span id="th-class"></span></th>
+          <th onclick="setSort('port')">Port(s) <span id="th-port"></span></th>
+          <th onclick="setSort('nights')">Nights <span id="th-nights"></span></th>
+          <th onclick="setSort('review')">Review <span id="th-review"></span></th>
+          <th onclick="setSort('age')">Year <span id="th-age"></span></th>
+          <th onclick="setSort('kids')">Kids <span id="th-kids"></span></th>
+          <th onclick="setSort('price')">~/night <span id="th-price"></span></th>
+          <th onclick="setSort('value')">Value <span id="th-value"></span></th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="footnote">
+    <strong>Value Score</strong> = weighted composite: Reviews 35% + Ship Age/Newness 25% + Kid Friendliness 20% + Price Competitiveness 20%.<br>
+    <strong>Nightly rate</strong> is a per-person ballpark estimate (interior cabin, 2-person occupancy) — not an all-in cost. Add gratuities, packages, flights, and excursions for true total.<br>
+    <strong>✦ drive</strong> = Galveston homeport (drive from Austin, no flight needed). Celebrity has no Galveston homeport.<br>
+    Data reflects 2026–2027 Royal Caribbean and Celebrity deployment schedules. Prices and itineraries subject to change.
+  </div>
+</div>
+
+<div class="footer-bar">McKinstrie Family Cruise Planner · Built June 2026</div>
+
+<script>
+const ships = [
+  { name:"Icon of the Seas", line:"Royal Caribbean", cls:"Icon", ports:["Miami"], nights:"7", nightMin:7, nightMax:7, review:9.2, launched:2024, kidScore:10, priceNight:220, destinations:"Eastern & Western Caribbean", kidType:"family", notes:"Dedicated Surfside family neighborhood; largest waterpark at sea; highest kid focus of any RC ship" },
+  { name:"Star of the Seas", line:"Royal Caribbean", cls:"Icon", ports:["Port Canaveral"], nights:"7", nightMin:7, nightMax:7, review:9.4, launched:2025, kidScore:10, priceNight:210, destinations:"Eastern & Western Caribbean", kidType:"family", notes:"Newest RC ship 2025; #1 ranked 2026; identical experience to Icon" },
+  { name:"Allure of the Seas", line:"Royal Caribbean", cls:"Oasis", ports:["Fort Lauderdale","Galveston","Miami"], nights:"6–8", nightMin:6, nightMax:8, review:9.0, launched:2010, kidScore:9, priceNight:170, destinations:"Caribbean, Western Caribbean", kidType:"family", notes:"$100M amplification 2025; Central Park, Boardwalk; multiple homeports including Galveston" },
+  { name:"Wonder of the Seas", line:"Royal Caribbean", cls:"Oasis", ports:["Port Canaveral","Fort Lauderdale"], nights:"3–5", nightMin:3, nightMax:5, review:9.0, launched:2022, kidScore:9, priceNight:180, destinations:"Bahamas, Caribbean", kidType:"family", notes:"Wonder Playscape; short getaways focus; Suite Neighborhood; Lime & Coconut pool bar" },
+  { name:"Symphony of the Seas", line:"Royal Caribbean", cls:"Oasis", ports:["Galveston","Miami"], nights:"6–8", nightMin:6, nightMax:8, review:8.8, launched:2018, kidScore:9, priceNight:160, destinations:"Western Caribbean", kidType:"family", notes:"Galveston homeport spring/summer 2026; full Oasis-class amenity set" },
+  { name:"Harmony of the Seas", line:"Royal Caribbean", cls:"Oasis", ports:["Port Canaveral","Galveston"], nights:"4–5", nightMin:4, nightMax:5, review:8.7, launched:2016, kidScore:9, priceNight:155, destinations:"Bahamas, Western Caribbean", kidType:"family", notes:"Post dry-dock 2026; short getaways from Port Canaveral fall 2026" },
+  { name:"Utopia of the Seas", line:"Royal Caribbean", cls:"Oasis", ports:["Port Canaveral"], nights:"3–5", nightMin:3, nightMax:5, review:8.5, launched:2024, kidScore:8, priceNight:185, destinations:"Bahamas", kidType:"family", notes:"Party-leaning vibe; short getaways only; 20+ bars; newer Oasis class" },
+  { name:"Oasis of the Seas", line:"Royal Caribbean", cls:"Oasis", ports:["Fort Lauderdale","Cape Liberty"], nights:"6–9", nightMin:6, nightMax:9, review:8.6, launched:2009, kidScore:8, priceNight:145, destinations:"Caribbean, Bahamas", kidType:"family", notes:"Oldest Oasis but renovated Oct 2024; Cape Liberty summer 2026; strong value for ship size" },
+  { name:"Adventure of the Seas", line:"Royal Caribbean", cls:"Voyager", ports:["Port Canaveral","Fort Lauderdale"], nights:"6–8", nightMin:6, nightMax:8, review:8.2, launched:2001, kidScore:7, priceNight:130, destinations:"Caribbean", kidType:"family", notes:"Voyager class; amplified; solid family performer; good value entry point" },
+  { name:"Liberty of the Seas", line:"Royal Caribbean", cls:"Freedom", ports:["Cape Liberty","Fort Lauderdale","Galveston"], nights:"4–7", nightMin:4, nightMax:7, review:8.3, launched:2007, kidScore:7, priceNight:135, destinations:"Bahamas, Caribbean, Western Caribbean", kidType:"family", notes:"Fresh 2026 Royal Amplified refit; Cape Liberty and Galveston (Oct 2026+); strong post-amplification value" },
+  { name:"Independence of the Seas", line:"Royal Caribbean", cls:"Freedom", ports:["Miami","Cape Liberty"], nights:"4–9", nightMin:4, nightMax:9, review:8.1, launched:2008, kidScore:7, priceNight:130, destinations:"Caribbean, Bermuda", kidType:"family", notes:"Amplified 2018; Cape Liberty summer; good range of itinerary lengths" },
+  { name:"Odyssey of the Seas", line:"Royal Caribbean", cls:"Quantum", ports:["Cape Liberty","Fort Lauderdale"], nights:"7–12", nightMin:7, nightMax:12, review:8.5, launched:2021, kidScore:6, priceNight:150, destinations:"Caribbean, Bahamas", kidType:"mixed", notes:"iFly skydiving, NorthStar observatory; Cape Liberty year-round; adult-leaning but capable family ship" },
+  { name:"Mariner of the Seas", line:"Royal Caribbean", cls:"Voyager", ports:["Galveston"], nights:"4–5", nightMin:4, nightMax:5, review:8.0, launched:2003, kidScore:7, priceNight:120, destinations:"Western Caribbean", kidType:"family", notes:"Galveston staple; drive from Austin; solid kid programming; great value for shorter trips" },
+  { name:"Explorer of the Seas", line:"Royal Caribbean", cls:"Voyager", ports:["Cape Liberty"], nights:"5–9", nightMin:5, nightMax:9, review:7.9, launched:2000, kidScore:6, priceNight:115, destinations:"Bermuda, Caribbean", kidType:"mixed", notes:"Voyager class veteran; Cape Liberty; budget entry for NJ/NY cruisers" },
+  { name:"Celebrity Xcel", line:"Celebrity", cls:"Edge", ports:["Miami","Fort Lauderdale"], nights:"7", nightMin:7, nightMax:7, review:9.3, launched:2025, kidScore:5, priceNight:215, destinations:"Eastern & Western Caribbean", kidType:"adults", notes:"Newest Celebrity ship 2025; best entertainment in Celebrity fleet; adult-focused" },
+  { name:"Celebrity Beyond", line:"Celebrity", cls:"Edge", ports:["Miami","Fort Lauderdale"], nights:"7", nightMin:7, nightMax:7, review:9.0, launched:2022, kidScore:5, priceNight:200, destinations:"Caribbean, Grand Cayman, Mexico", kidType:"adults", notes:"Third Edge ship; enlarged Rooftop Garden; outstanding dining; year-round South Florida" },
+  { name:"Celebrity Ascent", line:"Celebrity", cls:"Edge", ports:["Fort Lauderdale","Tampa"], nights:"7–14", nightMin:7, nightMax:14, review:8.9, launched:2023, kidScore:5, priceNight:205, destinations:"Southern & Eastern Caribbean", kidType:"adults", notes:"Fourth Edge ship; longer Southern Caribbean and Panama Canal itineraries" },
+  { name:"Celebrity Apex", line:"Celebrity", cls:"Edge", ports:["Fort Lauderdale","Miami"], nights:"7", nightMin:7, nightMax:7, review:8.8, launched:2021, kidScore:5, priceNight:190, destinations:"Caribbean", kidType:"adults", notes:"Second Edge ship; 2026 refurbishment scheduled; Eden restaurant standout" },
+  { name:"Celebrity Edge", line:"Celebrity", cls:"Edge", ports:["Fort Lauderdale","Miami"], nights:"7", nightMin:7, nightMax:7, review:8.5, launched:2018, kidScore:5, priceNight:175, destinations:"Caribbean", kidType:"adults", notes:"Original Edge ship; innovative design; some style-over-substance feedback vs newer sisters" },
+  { name:"Celebrity Silhouette", line:"Celebrity", cls:"Solstice", ports:["Fort Lauderdale","Cape Liberty","Boston"], nights:"7–11", nightMin:7, nightMax:11, review:8.7, launched:2011, kidScore:6, priceNight:165, destinations:"Caribbean, Bermuda, Canada/New England", kidType:"adults", notes:"Bermuda from Cape Liberty NJ; Canada/NE from Boston fall; Lawn Club; recent full refresh" },
+  { name:"Celebrity Reflection", line:"Celebrity", cls:"Solstice", ports:["Fort Lauderdale","Miami"], nights:"7", nightMin:7, nightMax:7, review:8.6, launched:2012, kidScore:6, priceNight:160, destinations:"Caribbean", kidType:"adults", notes:"Largest Solstice ship; year-round South Florida; spacious feel; excellent service" },
+  { name:"Celebrity Equinox", line:"Celebrity", cls:"Solstice", ports:["Fort Lauderdale"], nights:"7", nightMin:7, nightMax:7, review:8.3, launched:2009, kidScore:5, priceNight:145, destinations:"Caribbean", kidType:"adults", notes:"Solstice class; renovated; consistent service reviews; budget-friendly Celebrity entry" },
+];
+
+function ageScore(y) {
+  if (y >= 2024) return 10; if (y >= 2022) return 9; if (y >= 2020) return 8;
+  if (y >= 2016) return 7; if (y >= 2012) return 6; if (y >= 2008) return 5;
+  if (y >= 2004) return 4; return 3;
+}
+function priceScore(p) {
+  if (p <= 120) return 10; if (p <= 140) return 9; if (p <= 160) return 8;
+  if (p <= 180) return 7; if (p <= 200) return 6; if (p <= 220) return 5; return 4;
+}
+function computeValue(s) {
+  return parseFloat(((s.review * 0.35) + (ageScore(s.launched) * 0.25) + (s.kidScore * 0.20) + (priceScore(s.priceNight) * 0.20)).toFixed(2));
+}
+const allShips = ships.map(s => ({...s, value: computeValue(s)}));
+
+let sortKey = 'value', sortDir = -1;
+
+function setSort(k) {
+  if (sortKey === k) { sortDir *= -1; } else { sortKey = k; sortDir = -1; }
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('s-' + k);
+  if (btn) btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const fLine = document.getElementById('fLine').value;
+  const fPort = document.getElementById('fPort').value;
+  const fKids = document.getElementById('fKids').value;
+  const fNights = document.getElementById('fNights').value;
+  const fClass = document.getElementById('fClass').value;
+  const fDrive = document.getElementById('fDrive').value;
+
+  let data = allShips.filter(s => {
+    if (fLine && s.line !== fLine) return false;
+    if (fPort && !s.ports.includes(fPort)) return false;
+    if (fKids === 'family' && s.kidType === 'adults') return false;
+    if (fKids === 'adults' && s.kidType === 'family') return false;
+    if (fNights === 'short' && s.nightMax > 5) return false;
+    if (fNights === 'week' && (s.nightMin > 8 || s.nightMax < 6)) return false;
+    if (fNights === 'long' && s.nightMin < 9) return false;
+    if (fClass && !s.cls.includes(fClass)) return false;
+    if (fDrive === 'yes' && !s.ports.includes('Galveston')) return false;
+    if (fDrive === 'no' && s.ports.length === 1 && s.ports[0] === 'Galveston') return false;
+    return true;
+  });
+
+  const keyMap = { name:'name', line:'line', class:'cls', port:(s)=>s.ports[0], nights:'nightMin', review:'review', age:'launched', kids:'kidScore', price:'priceNight', value:'value' };
+  data.sort((a,b) => {
+    let av = typeof keyMap[sortKey]==='function' ? keyMap[sortKey](a) : a[keyMap[sortKey]];
+    let bv = typeof keyMap[sortKey]==='function' ? keyMap[sortKey](b) : b[keyMap[sortKey]];
+    if (typeof av==='string') return sortDir * av.localeCompare(bv);
+    return sortDir * (av - bv);
+  });
+
+  const thKeys = ['name','line','class','port','nights','review','age','kids','price','value'];
+  thKeys.forEach(k => { const el = document.getElementById('th-'+k); if (el) el.textContent = sortKey===k ? (sortDir===-1 ? '↓' : '↑') : ''; });
+
+  document.getElementById('countLine').textContent = data.length + ' ships shown';
+
+  const tbody = document.getElementById('tbody');
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#64748b;padding:2rem;">No ships match these filters</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map(s => {
+    const lineBadge = s.line==='Royal Caribbean' ? 'badge-rc' : 'badge-cel';
+    const lineShort = s.line==='Royal Caribbean' ? 'RC' : 'Celebrity';
+    const kidBadge = s.kidType==='family' ? 'badge-family' : s.kidType==='adults' ? 'badge-adults' : 'badge-mixed';
+    const kidLabel = s.kidType==='family' ? 'Family' : s.kidType==='adults' ? 'Adults' : 'Mixed';
+    const vPct = Math.round((s.value/10)*100);
+    const vColor = s.value>=8.5 ? '#10b981' : s.value>=7.5 ? '#f59e0b' : '#ef4444';
+    const portStr = s.ports.slice(0,2).join(', ') + (s.ports.length>2 ? ' +1' : '');
+    const driveMark = s.ports.includes('Galveston') ? '<span class="drive-tag" title="Drive from Austin">✦</span>' : '';
+    const yearClass = s.launched>=2022 ? 'year-new' : s.launched>=2015 ? 'year-mid' : 'year-old';
+    return `<tr>
+      <td style="font-weight:500;white-space:nowrap;">${s.name}</td>
+      <td><span class="badge ${lineBadge}">${lineShort}</span></td>
+      <td><span class="tag">${s.cls}</span></td>
+      <td style="font-size:12px;white-space:nowrap;">${portStr}${driveMark}</td>
+      <td style="color:#94a3b8;font-size:12px;">${s.nights}n</td>
+      <td style="font-weight:600;">${s.review.toFixed(1)}</td>
+      <td><span class="${yearClass}">${s.launched}</span></td>
+      <td><span class="badge ${kidBadge}">${kidLabel}</span> <span style="font-size:11px;color:#64748b;">${s.kidScore}/10</span></td>
+      <td style="color:#94a3b8;font-size:12px;">~$${s.priceNight}</td>
+      <td>
+        <div class="score-wrap">
+          <div class="score-bar"><div class="score-fill" style="width:${vPct}%;background:${vColor};"></div></div>
+          <span class="score-num" style="color:${vColor};">${s.value.toFixed(1)}</span>
+        </div>
+      </td>
+      <td class="notes-cell">${s.notes}</td>
+    </tr>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>
