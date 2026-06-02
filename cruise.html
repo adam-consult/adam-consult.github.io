@@ -177,7 +177,7 @@
   .results-count { font-size: 13px; color: var(--muted); }
 
   .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1000px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1200px; }
   thead { background: var(--surface-alt); }
   th {
     text-align: left;
@@ -231,7 +231,8 @@
   .year-old { color: var(--muted); }
 
   /* Notes tooltip */
-  td.notes-cell { max-width: 220px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+  td.notes-cell { max-width: 200px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+  td.itin-cell  { max-width: 240px; font-size: 11px; color: var(--text); line-height: 1.6; }
 
   /* Footer */
   .footnote {
@@ -270,7 +271,7 @@
   <h1>Cruise <em>Planner</em></h1>
   <p class="hero-sub">Royal Caribbean &amp; Celebrity — ranked by value, reviews, and family fit</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-num">22</div><div class="hero-stat-label">Ships Rated</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">23</div><div class="hero-stat-label">Ships Rated</div></div>
     <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Home Ports</div></div>
     <div class="hero-stat"><div class="hero-stat-num">2026–27</div><div class="hero-stat-label">Season</div></div>
   </div>
@@ -299,6 +300,7 @@
           <option value="Port Canaveral">Port Canaveral, FL</option>
           <option value="Cape Liberty">Cape Liberty, NJ</option>
           <option value="Boston">Boston, MA</option>
+          <option value="New Orleans">New Orleans, LA</option>
         </select>
       </div>
       <div class="filter-group">
@@ -372,6 +374,7 @@
           <th onclick="setSort('kids')">Kids <span id="th-kids"></span></th>
           <th onclick="setSort('price')">~/night <span id="th-price"></span></th>
           <th onclick="setSort('value')">Value <span id="th-value"></span></th>
+          <th>Itineraries</th>
           <th>Notes</th>
         </tr>
       </thead>
@@ -383,8 +386,8 @@
     <strong>Value Score</strong> = weighted composite: Reviews 35% + Ship Age/Newness 25% + Kid Friendliness 20% + Price Competitiveness 20%.<br>
     <strong>Space Ratio</strong> = Gross Tonnage ÷ Passengers (double occupancy). Industry standard crowding metric — higher is less crowded. <span style="color:#059669;font-weight:600;">≥44 = spacious</span> · <span style="color:#1e6bb8;font-weight:600;">42–43 = comfortable</span> · <span style="color:#64748b;">below 42 = denser</span>.<br>
     <strong>Nightly rate</strong> is a per-person ballpark estimate (interior cabin, 2-person occupancy) — not an all-in cost. Add gratuities, packages, flights, and excursions for true total.<br>
-    <strong>✦ drive</strong> = Galveston homeport (drive from Austin, no flight needed). Celebrity has no Galveston homeport.<br>
-    Data reflects 2026–2027 RC and Celebrity deployment schedules. Symphony of the Seas relocates from Galveston to Fort Lauderdale in 2027. Prices and itineraries subject to change.
+    <strong>✦ drive</strong> = Galveston or New Orleans homeport (drivable from Austin — ~3.5 hrs and ~5.5 hrs respectively). Celebrity has no Texas/Louisiana homeport.<br>
+    Data reflects 2026–2027 RC and Celebrity deployment schedules. Symphony relocates Galveston → Fort Lauderdale in 2027. Celebrity Edge and Equinox are deployed outside North American Caribbean this season. Prices and itineraries subject to change.
   </div>
 </div>
 
@@ -392,28 +395,29 @@
 
 <script>
 const ships = [
-  { name:"Icon of the Seas",        line:"Royal Caribbean", cls:"Icon",    ports:["Miami"],                             nights:"7",    nightMin:7,  nightMax:7,  review:9.2, launched:2024, kidScore:10, priceNight:220, pax:5610, gt:250800, kidType:"family", notes:"Dedicated Surfside family neighborhood; largest waterpark at sea; highest kid focus of any RC ship" },
-  { name:"Star of the Seas",         line:"Royal Caribbean", cls:"Icon",    ports:["Port Canaveral"],                    nights:"7",    nightMin:7,  nightMax:7,  review:9.4, launched:2025, kidScore:10, priceNight:210, pax:5610, gt:250800, kidType:"family", notes:"Newest RC ship 2025; #1 ranked 2026; identical experience to Icon" },
-  { name:"Allure of the Seas",       line:"Royal Caribbean", cls:"Oasis",   ports:["Fort Lauderdale","Galveston","Miami"],nights:"6–8",  nightMin:6,  nightMax:8,  review:9.0, launched:2010, kidScore:9,  priceNight:170, pax:5400, gt:228081, kidType:"family", notes:"$100M amplification 2025; Central Park, Boardwalk; multiple homeports including Galveston spring 2026" },
-  { name:"Wonder of the Seas",       line:"Royal Caribbean", cls:"Oasis",   ports:["Port Canaveral","Fort Lauderdale"],  nights:"3–5",  nightMin:3,  nightMax:5,  review:9.0, launched:2022, kidScore:9,  priceNight:180, pax:5734, gt:236857, kidType:"family", notes:"Wonder Playscape; short getaways focus; Suite Neighborhood; Lime & Coconut pool bar" },
-  { name:"Symphony of the Seas",     line:"Royal Caribbean", cls:"Oasis",   ports:["Galveston","Miami"],                 nights:"6–8",  nightMin:6,  nightMax:8,  review:8.8, launched:2018, kidScore:9,  priceNight:160, pax:5518, gt:228021, kidType:"family", notes:"Galveston homeport through end of 2026; redeploying to Fort Lauderdale in 2027" },
-  { name:"Harmony of the Seas",      line:"Royal Caribbean", cls:"Oasis",   ports:["Port Canaveral"],                    nights:"4–5",  nightMin:4,  nightMax:5,  review:8.7, launched:2016, kidScore:9,  priceNight:155, pax:5479, gt:226963, kidType:"family", notes:"Post dry-dock 2026; short getaways from Port Canaveral; flight required from Austin" },
-  { name:"Utopia of the Seas",       line:"Royal Caribbean", cls:"Oasis",   ports:["Port Canaveral"],                    nights:"3–5",  nightMin:3,  nightMax:5,  review:8.5, launched:2024, kidScore:8,  priceNight:185, pax:5668, gt:236000, kidType:"family", notes:"Party-leaning vibe; short getaways only; 20+ bars; newer Oasis class" },
-  { name:"Oasis of the Seas",        line:"Royal Caribbean", cls:"Oasis",   ports:["Fort Lauderdale","Cape Liberty"],    nights:"6–9",  nightMin:6,  nightMax:9,  review:8.6, launched:2009, kidScore:8,  priceNight:145, pax:5400, gt:226838, kidType:"family", notes:"Oldest Oasis but renovated Oct 2024; Cape Liberty summer 2026; strong value for ship size" },
-  { name:"Odyssey of the Seas",      line:"Royal Caribbean", cls:"Quantum",  ports:["Cape Liberty","Fort Lauderdale"],   nights:"7–12", nightMin:7,  nightMax:12, review:8.5, launched:2021, kidScore:6,  priceNight:150, pax:4180, gt:169116, kidType:"mixed",  notes:"iFly skydiving, NorthStar observatory; Cape Liberty year-round; adult-leaning but capable family ship" },
-  { name:"Liberty of the Seas",      line:"Royal Caribbean", cls:"Freedom",  ports:["Galveston","Fort Lauderdale"],      nights:"4–5",  nightMin:4,  nightMax:5,  review:8.3, launched:2007, kidScore:7,  priceNight:135, pax:3634, gt:154407, kidType:"family", notes:"Royal Amplified 2026; Galveston homeport from Oct 2026 through 2028+; 4–5 night Cozumel/Costa Maya" },
-  { name:"Independence of the Seas", line:"Royal Caribbean", cls:"Freedom",  ports:["Miami","Cape Liberty"],             nights:"4–9",  nightMin:4,  nightMax:9,  review:8.1, launched:2008, kidScore:7,  priceNight:130, pax:3634, gt:154407, kidType:"family", notes:"Amplified 2018; Cape Liberty summer; good range of itinerary lengths" },
-  { name:"Adventure of the Seas",    line:"Royal Caribbean", cls:"Voyager",  ports:["Port Canaveral","Fort Lauderdale"], nights:"6–8",  nightMin:6,  nightMax:8,  review:8.2, launched:2001, kidScore:7,  priceNight:130, pax:3114, gt:137276, kidType:"family", notes:"Voyager class; amplified; solid family performer; good value entry point" },
-  { name:"Mariner of the Seas",      line:"Royal Caribbean", cls:"Voyager",  ports:["Galveston"],                        nights:"4–5",  nightMin:4,  nightMax:5,  review:8.0, launched:2003, kidScore:7,  priceNight:120, pax:3344, gt:139863, kidType:"family", notes:"Galveston staple; drive from Austin; solid kid programming; great value for shorter trips" },
-  { name:"Explorer of the Seas",     line:"Royal Caribbean", cls:"Voyager",  ports:["Cape Liberty"],                     nights:"5–9",  nightMin:5,  nightMax:9,  review:7.9, launched:2000, kidScore:6,  priceNight:115, pax:3114, gt:137308, kidType:"mixed",  notes:"Voyager class veteran; Cape Liberty; budget entry for NJ/NY cruisers" },
-  { name:"Celebrity Xcel",           line:"Celebrity",       cls:"Edge",    ports:["Miami","Fort Lauderdale"],           nights:"7",    nightMin:7,  nightMax:7,  review:9.3, launched:2025, kidScore:5,  priceNight:215, pax:3260, gt:140600, kidType:"adults", notes:"Newest Celebrity 2025; Miami homeport Nov 2026–Apr 2027; best entertainment in Celebrity fleet" },
-  { name:"Celebrity Beyond",         line:"Celebrity",       cls:"Edge",    ports:["Miami","Fort Lauderdale"],           nights:"7",    nightMin:7,  nightMax:7,  review:9.0, launched:2022, kidScore:5,  priceNight:200, pax:3260, gt:140600, kidType:"adults", notes:"Year-round Miami/Fort Lauderdale; Rooftop Garden; outstanding dining; ABC Islands itineraries" },
-  { name:"Celebrity Ascent",         line:"Celebrity",       cls:"Edge",    ports:["Fort Lauderdale"],                   nights:"7–14", nightMin:7,  nightMax:14, review:8.9, launched:2023, kidScore:5,  priceNight:205, pax:3260, gt:140600, kidType:"adults", notes:"Fort Lauderdale homeport; longer Southern Caribbean and Panama Canal itineraries" },
-  { name:"Celebrity Apex",           line:"Celebrity",       cls:"Edge",    ports:["Port Canaveral"],                    nights:"7",    nightMin:7,  nightMax:7,  review:8.8, launched:2021, kidScore:5,  priceNight:190, pax:2910, gt:130818, kidType:"adults", notes:"Port Canaveral homeport (returns Oct 2026); Edge-class style on the Space Coast; Eden restaurant standout" },
-  { name:"Celebrity Edge",           line:"Celebrity",       cls:"Edge",    ports:["Fort Lauderdale","Miami"],           nights:"7",    nightMin:7,  nightMax:7,  review:8.5, launched:2018, kidScore:5,  priceNight:175, pax:2918, gt:130818, kidType:"adults", notes:"Original Edge ship; innovative design; some style-over-substance feedback vs newer sisters" },
-  { name:"Celebrity Silhouette",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale","Cape Liberty","Boston"],nights:"7–11",nightMin:7,nightMax:11,review:8.7, launched:2011, kidScore:6,  priceNight:165, pax:2886, gt:122400, kidType:"adults", notes:"Bermuda from Cape Liberty NJ; Canada/NE from Boston fall; Lawn Club; recent full refresh" },
-  { name:"Celebrity Reflection",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"3–7",  nightMin:3,  nightMax:7,  review:8.6, launched:2012, kidScore:6,  priceNight:160, pax:3046, gt:126000, kidType:"adults", notes:"Weekend 3–4 night getaways + 7-night sailings from Fort Lauderdale; CocoCay, Bimini, Nassau, Key West" },
-  { name:"Celebrity Equinox",        line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"7",    nightMin:7,  nightMax:7,  review:8.3, launched:2009, kidScore:5,  priceNight:145, pax:2850, gt:122400, kidType:"adults", notes:"Solstice class; renovated; consistent service reviews; budget-friendly Celebrity entry" },
+  { name:"Icon of the Seas",        line:"Royal Caribbean", cls:"Icon",    ports:["Miami"],                             nights:"7",    nightMin:7,  nightMax:7,  review:9.2, launched:2024, kidScore:10, priceNight:220, pax:5610, gt:250800, kidType:"family", itin:"Eastern: CocoCay · Puerto Plata · San Juan · St. Thomas · St. Maarten; Western: CocoCay · Costa Maya · Cozumel · Roatán", notes:"Dedicated Surfside family neighborhood; largest waterpark at sea; highest kid focus of any RC ship" },
+  { name:"Star of the Seas",         line:"Royal Caribbean", cls:"Icon",    ports:["Port Canaveral"],                    nights:"7",    nightMin:7,  nightMax:7,  review:9.4, launched:2025, kidScore:10, priceNight:210, pax:5610, gt:250800, kidType:"family", itin:"Eastern: CocoCay · St. Thomas · St. Kitts · St. Maarten; Western: CocoCay · Cozumel · Roatán · Costa Maya", notes:"Newest RC ship 2025; #1 ranked 2026; 7-night Eastern & Western Caribbean from Port Canaveral" },
+  { name:"Allure of the Seas",       line:"Royal Caribbean", cls:"Oasis",   ports:["Fort Lauderdale","Galveston","Miami"],nights:"6–8",  nightMin:6,  nightMax:8,  review:9.0, launched:2010, kidScore:9,  priceNight:170, pax:5400, gt:228081, kidType:"family", itin:"Varies by port: FLL/MIA Eastern & Western Caribbean; GAL: Costa Maya · Cozumel · Roatán", notes:"$100M amplification 2025; Fort Lauderdale spring → Galveston summer → Miami fall 2026; Central Park, Boardwalk" },
+  { name:"Wonder of the Seas",       line:"Royal Caribbean", cls:"Oasis",   ports:["Miami"],                             nights:"3–4",  nightMin:3,  nightMax:4,  review:9.0, launched:2022, kidScore:9,  priceNight:180, pax:5734, gt:236857, kidType:"family", itin:"CocoCay · Nassau", notes:"3-4 night Bahamas/CocoCay from Miami; Wonder Playscape; Suite Neighborhood; Lime & Coconut pool bar" },
+  { name:"Symphony of the Seas",     line:"Royal Caribbean", cls:"Oasis",   ports:["Miami","Galveston"],                 nights:"6–8",  nightMin:6,  nightMax:8,  review:8.8, launched:2018, kidScore:9,  priceNight:160, pax:5518, gt:228021, kidType:"family", itin:"GAL (6-7n): Costa Maya · Roatán · Cozumel; GAL (8n): CocoCay · Nassau; MIA: Western Caribbean", notes:"Miami winter (7-night) then Galveston spring/summer 2026 (6-8 night); redeploying to Fort Lauderdale 2027" },
+  { name:"Harmony of the Seas",      line:"Royal Caribbean", cls:"Oasis",   ports:["Port Canaveral"],                    nights:"4–5",  nightMin:4,  nightMax:5,  review:8.7, launched:2016, kidScore:9,  priceNight:155, pax:5479, gt:226963, kidType:"family", itin:"4-5n: CocoCay · Nassau; 7n: San Juan · Puerto Plata · St. Thomas", notes:"Post dry-dock fall 2026; 4-5 night Bahamas from Port Canaveral; flight required from Austin" },
+  { name:"Utopia of the Seas",       line:"Royal Caribbean", cls:"Oasis",   ports:["Port Canaveral"],                    nights:"3–4",  nightMin:3,  nightMax:4,  review:8.5, launched:2024, kidScore:8,  priceNight:185, pax:5668, gt:236000, kidType:"family", itin:"CocoCay · Nassau · Bimini", notes:"3-4 night Bahamas getaways from Port Canaveral; party-leaning vibe; 20+ bars; flight required from Austin" },
+  { name:"Oasis of the Seas",        line:"Royal Caribbean", cls:"Oasis",   ports:["Fort Lauderdale","Cape Liberty"],    nights:"3–8",  nightMin:3,  nightMax:8,  review:8.6, launched:2009, kidScore:8,  priceNight:145, pax:5400, gt:226838, kidType:"family", itin:"FLL: Nassau · Falmouth · CocoCay; CLB: CocoCay · San Juan · Puerto Plata", notes:"Fort Lauderdale 6-8 night Caribbean + 3-4 night Bahamas late year; Cape Liberty 7-night Bahamas summer; renovated Oct 2024" },
+  { name:"Odyssey of the Seas",      line:"Royal Caribbean", cls:"Quantum",  ports:["Cape Liberty"],                     nights:"7",    nightMin:7,  nightMax:7,  review:8.5, launched:2021, kidScore:6,  priceNight:150, pax:4180, gt:169116, kidType:"mixed",  itin:"CocoCay · Nassau · Falmouth · Grand Cayman · Aruba · Curaçao", notes:"Cape Liberty year-round 7-night Bahamas; iFly skydiving, NorthStar observatory; adult-leaning but capable family ship" },
+  { name:"Liberty of the Seas",      line:"Royal Caribbean", cls:"Freedom",  ports:["Galveston","Fort Lauderdale"],      nights:"4–5",  nightMin:4,  nightMax:5,  review:8.3, launched:2007, kidScore:7,  priceNight:135, pax:3634, gt:154407, kidType:"family", itin:"4n: Cozumel; 5n: Costa Maya · Cozumel", notes:"Royal Amplified 2026; Galveston from Oct 2026 through 2028+; 4-5 night Cozumel/Costa Maya" },
+  { name:"Independence of the Seas", line:"Royal Caribbean", cls:"Freedom",  ports:["Miami","Cape Liberty"],             nights:"4–9",  nightMin:4,  nightMax:9,  review:8.1, launched:2008, kidScore:7,  priceNight:130, pax:3634, gt:154407, kidType:"family", itin:"MIA: Eastern & Western Caribbean; CLB: Bermuda · Canada/New England", notes:"Miami 7-night Caribbean winter/spring; Cape Liberty 4-5-9 night Bermuda/Canada/Caribbean summer" },
+  { name:"Adventure of the Seas",    line:"Royal Caribbean", cls:"Voyager",  ports:["Port Canaveral","Fort Lauderdale"], nights:"6–8",  nightMin:6,  nightMax:8,  review:8.2, launched:2001, kidScore:7,  priceNight:130, pax:3114, gt:137276, kidType:"family", itin:"Western (6n): Falmouth · Grand Cayman; Eastern (8n): San Juan · St. Thomas · St. Croix; Southern (8n): Aruba · Curaçao", notes:"Port Canaveral 6-8 night Caribbean most of 2026; repositions to Fort Lauderdale late year" },
+  { name:"Mariner of the Seas",      line:"Royal Caribbean", cls:"Voyager",  ports:["Galveston","New Orleans"],           nights:"4–7",  nightMin:4,  nightMax:7,  review:8.0, launched:2003, kidScore:7,  priceNight:120, pax:3344, gt:139863, kidType:"family", itin:"GAL (4-5n): Costa Maya · Cozumel; NOL (6-7n): Cozumel · Grand Cayman · Falmouth · Belize City", notes:"Galveston 4-5 night Western Caribbean most of 2026; moves to New Orleans late year for 7-night cruises" },
+  { name:"Explorer of the Seas",     line:"Royal Caribbean", cls:"Voyager",  ports:["Port Canaveral"],                    nights:"4–5",  nightMin:4,  nightMax:5,  review:7.9, launched:2000, kidScore:6,  priceNight:115, pax:3114, gt:137308, kidType:"mixed",  itin:"4n: Nassau · CocoCay; 5n: Nassau · Cozumel", notes:"Port Canaveral 4-5 night Bahamas/Caribbean; also sails Mediterranean from Ravenna mid-year; flight required" },
+  { name:"Celebrity Xcel",           line:"Celebrity",       cls:"Edge",    ports:["Miami"],                             nights:"7",    nightMin:7,  nightMax:7,  review:9.3, launched:2025, kidScore:5,  priceNight:215, pax:3260, gt:140600, kidType:"adults", itin:"Eastern: St. Thomas · Antigua · Nassau; Western: Cozumel · Grand Cayman · Bimini; Southern: Aruba · Bonaire · Curaçao", notes:"Newest Celebrity 2025; Miami homeport Nov 2026–Apr 2027; Mediterranean summer 2026; best entertainment in fleet" },
+  { name:"Celebrity Beyond",         line:"Celebrity",       cls:"Edge",    ports:["Miami","Fort Lauderdale"],           nights:"7",    nightMin:7,  nightMax:7,  review:9.0, launched:2022, kidScore:5,  priceNight:200, pax:3260, gt:140600, kidType:"adults", itin:"ABC Islands: Aruba · Bonaire · Curaçao; Eastern: BVI · St. Kitts · Puerto Plata · Grand Turk", notes:"Year-round Miami/Fort Lauderdale; 7-night Caribbean; Rooftop Garden; outstanding dining" },
+  { name:"Celebrity Ascent",         line:"Celebrity",       cls:"Edge",    ports:["Fort Lauderdale"],                   nights:"10–11",nightMin:10, nightMax:11, review:8.9, launched:2023, kidScore:5,  priceNight:205, pax:3260, gt:140600, kidType:"adults", itin:"Southern (10n): Tortola · Antigua · Barbados · St. Lucia · St. Kitts; Panama Canal (11n): Cartagena · Colón · Aruba · Bonaire", notes:"Fort Lauderdale 10-11 night Southern Caribbean and Panama Canal; longest Celebrity Caribbean itineraries" },
+  { name:"Celebrity Apex",           line:"Celebrity",       cls:"Edge",    ports:["Port Canaveral"],                    nights:"4–7",  nightMin:4,  nightMax:7,  review:8.8, launched:2021, kidScore:5,  priceNight:190, pax:2910, gt:130818, kidType:"adults", itin:"Key West · Nassau · Bimini · Grand Turk · Puerto Plata · St. Thomas", notes:"Port Canaveral homeport (returns Oct 2026); 4- and 7-night Key West & Bahamas; Eden restaurant standout" },
+  { name:"Celebrity Edge",           line:"Celebrity",       cls:"Edge",    ports:["Fort Lauderdale","Miami"],           nights:"7",    nightMin:7,  nightMax:7,  review:8.5, launched:2018, kidScore:5,  priceNight:175, pax:2918, gt:130818, kidType:"adults", itin:"Not in Caribbean this season", notes:"2026-27 deployed to Alaska + Australia/NZ — not sailing Caribbean from Florida this season" },
+  { name:"Celebrity Eclipse",        line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"9–12", nightMin:9,  nightMax:12, review:8.5, launched:2010, kidScore:5,  priceNight:155, pax:2850, gt:122000, kidType:"adults", itin:"Eastern (8n): Antigua · St. Maarten · San Juan · Puerto Plata; Western (6n): Grand Cayman · Cozumel · Nassau; Southern (12n): Full Southern Caribbean", notes:"Fort Lauderdale 9-12 night Caribbean; ABC Islands, Jamaica, Grand Cayman, Mexico; longest standard Celebrity itineraries from Florida" },
+  { name:"Celebrity Silhouette",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale","Cape Liberty"],    nights:"6–11", nightMin:6,  nightMax:11, review:8.7, launched:2011, kidScore:6,  priceNight:165, pax:2886, gt:122400, kidType:"adults", itin:"FLL (6n): Jamaica · Grand Cayman · Cozumel; FLL (8n): Aruba · Curaçao · Bonaire; CLB: Bermuda", notes:"Fort Lauderdale 6-8 night Caribbean (ABC Islands, Jamaica, Grand Cayman); Bermuda from Cape Liberty NJ" },
+  { name:"Celebrity Reflection",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"3–4",  nightMin:3,  nightMax:4,  review:8.6, launched:2012, kidScore:6,  priceNight:160, pax:3046, gt:126000, kidType:"adults", itin:"CocoCay · Bimini · Nassau · Key West", notes:"Year-round 3-4 night weekend getaways from Fort Lauderdale; CocoCay, Bimini, Nassau, Key West" },
+  { name:"Celebrity Equinox",        line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"7–14", nightMin:7,  nightMax:14, review:8.3, launched:2009, kidScore:5,  priceNight:145, pax:2850, gt:122400, kidType:"adults", itin:"Not in Caribbean this season", notes:"2026-27 deployed to South America/Antarctica + Mediterranean — not sailing Caribbean from Florida this season" },
 ];
 
 function ageScore(y) {
@@ -457,8 +461,8 @@ function render() {
     if (fNights === 'week' && (s.nightMin > 8 || s.nightMax < 6)) return false;
     if (fNights === 'long' && s.nightMin < 9) return false;
     if (fClass && !s.cls.includes(fClass)) return false;
-    if (fDrive === 'yes' && !s.ports.includes('Galveston')) return false;
-    if (fDrive === 'no' && s.ports.length === 1 && s.ports[0] === 'Galveston') return false;
+    if (fDrive === 'yes' && !s.ports.includes('Galveston') && !s.ports.includes('New Orleans')) return false;
+    if (fDrive === 'no' && s.ports.every(p => p === 'Galveston' || p === 'New Orleans')) return false;
     return true;
   });
 
@@ -477,7 +481,7 @@ function render() {
 
   const tbody = document.getElementById('tbody');
   if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:#64748b;padding:2rem;background:#fff;">No ships match these filters</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:#64748b;padding:2rem;background:#fff;">No ships match these filters</td></tr>';
     return;
   }
 
@@ -509,6 +513,7 @@ function render() {
           <span class="score-num" style="color:${vColor};">${s.value.toFixed(1)}</span>
         </div>
       </td>
+      <td class="itin-cell">${s.itin}</td>
       <td class="notes-cell">${s.notes}</td>
     </tr>`;
   }).join('');
