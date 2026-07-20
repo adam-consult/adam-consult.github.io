@@ -177,7 +177,7 @@
   .results-count { font-size: 13px; color: var(--muted); }
 
   .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1200px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 960px; }
   thead { background: var(--surface-alt); }
   th {
     text-align: left;
@@ -234,8 +234,14 @@
   .year-old { color: var(--muted); }
 
   /* Notes tooltip */
-  td.notes-cell { max-width: 200px; font-size: 11px; color: var(--muted); line-height: 1.5; }
-  td.itin-cell  { max-width: 240px; font-size: 11px; color: var(--text); line-height: 1.6; }
+  tr.data-row { cursor: pointer; }
+  tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); }
+  tr.detail-row .detail-panel { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 1rem 1.5rem 1.25rem; background: rgba(30,107,184,0.03); }
+  tr.detail-row.open .detail-panel { display: grid; }
+  .detail-label { font-size: 11px; font-weight: 700; color: #1e6bb8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem; }
+  .detail-text { font-size: 12px; color: var(--text); line-height: 1.7; }
+  .expand-cell { width: 28px; text-align: center; color: #94a3b8; font-size: 14px; transition: transform 0.2s; user-select: none; }
+  tr.data-row.open .expand-cell { transform: rotate(90deg); color: #1e6bb8; }
 
   /* Footer */
   .footnote {
@@ -381,8 +387,7 @@
           <th onclick="setSort('kids')">Kids <span id="th-kids"></span></th>
           <th onclick="setSort('price')">~/night <span id="th-price"></span></th>
           <th onclick="setSort('value')">Value <span id="th-value"></span></th>
-          <th>Itineraries</th>
-          <th>Notes</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
@@ -494,11 +499,11 @@ function render() {
   const thKeys = ['name','line','class','port','nights','pax','space','review','age','kids','price','value'];
   thKeys.forEach(k => { const el = document.getElementById('th-'+k); if (el) el.textContent = sortKey===k ? (sortDir===-1 ? '↓' : '↑') : ''; });
 
-  document.getElementById('countLine').textContent = data.length + ' ships shown';
+  document.getElementById('countLine').textContent = data.length + ' ships shown — click any row for itinerary & notes';
 
   const tbody = document.getElementById('tbody');
   if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:#64748b;padding:2rem;background:#fff;">No ships match these filters</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:#64748b;padding:2rem;background:#fff;">No ships match these filters</td></tr>';
     return;
   }
 
@@ -512,7 +517,8 @@ function render() {
     const portStr = s.ports.slice(0,2).join(', ') + (s.ports.length>2 ? ' +1' : '');
     const driveMark = s.ports.includes('Galveston') ? '<span class="drive-tag" title="Drive from Austin">✦</span>' : '';
     const yearClass = s.launched>=2022 ? 'year-new' : s.launched>=2015 ? 'year-mid' : 'year-old';
-    return `<tr>
+    const idx = Math.random().toString(36).slice(2);
+    return `<tr class="data-row" onclick="toggleDetail(this)">
       <td style="font-weight:500;white-space:nowrap;">${s.name}</td>
       <td><span class="badge ${lineBadge}">${lineShort}</span></td>
       <td><span class="tag">${s.cls}</span></td>
@@ -530,10 +536,30 @@ function render() {
           <span class="score-num" style="color:${vColor};">${s.value.toFixed(1)}</span>
         </div>
       </td>
-      <td class="itin-cell">${s.itin}</td>
-      <td class="notes-cell">${s.notes}</td>
+      <td class="expand-cell">›</td>
+    </tr>
+    <tr class="detail-row">
+      <td colspan="13">
+        <div class="detail-panel">
+          <div>
+            <div class="detail-label">Itineraries</div>
+            <div class="detail-text">${s.itin}</div>
+          </div>
+          <div>
+            <div class="detail-label">Notes</div>
+            <div class="detail-text">${s.notes}</div>
+          </div>
+        </div>
+      </td>
     </tr>`;
   }).join('');
+}
+
+function toggleDetail(row) {
+  const detailRow = row.nextElementSibling;
+  const isOpen = detailRow.classList.contains('open');
+  detailRow.classList.toggle('open');
+  row.classList.toggle('open');
 }
 
 render();
