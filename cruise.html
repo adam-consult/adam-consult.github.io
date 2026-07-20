@@ -213,6 +213,9 @@
   }
   .badge-rc { background: rgba(30,107,184,0.12); color: #1e6bb8; border: 1px solid rgba(30,107,184,0.25); }
   .badge-cel { background: rgba(124,58,237,0.12); color: #7c3aed; border: 1px solid rgba(124,58,237,0.25); }
+  .badge-msc { background: rgba(15,118,110,0.12); color: #0f766e; border: 1px solid rgba(15,118,110,0.25); }
+  .badge-ncl { background: rgba(220,38,38,0.12); color: #dc2626; border: 1px solid rgba(220,38,38,0.25); }
+  .badge-disney { background: rgba(37,99,235,0.12); color: #2563eb; border: 1px solid rgba(37,99,235,0.25); }
   .badge-family { background: rgba(5,150,105,0.1); color: #059669; border: 1px solid rgba(5,150,105,0.25); }
   .badge-adults { background: rgba(217,119,6,0.1); color: #d97706; border: 1px solid rgba(217,119,6,0.25); }
   .badge-mixed { background: rgba(100,116,139,0.1); color: #475569; border: 1px solid rgba(100,116,139,0.25); }
@@ -269,9 +272,9 @@
 <div class="hero">
   <div class="hero-eyebrow">McKinstrie Family</div>
   <h1>Cruise <em>Planner</em></h1>
-  <p class="hero-sub">Royal Caribbean &amp; Celebrity — ranked by value, reviews, and family fit</p>
+  <p class="hero-sub">Royal Caribbean · Celebrity · MSC · Norwegian · Disney — ranked by value, reviews, and family fit</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-num">23</div><div class="hero-stat-label">Ships Rated</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">26</div><div class="hero-stat-label">Ships Rated</div></div>
     <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Home Ports</div></div>
     <div class="hero-stat"><div class="hero-stat-num">2026–27</div><div class="hero-stat-label">Season</div></div>
   </div>
@@ -285,9 +288,12 @@
       <div class="filter-group">
         <label>Cruise Line</label>
         <select id="fLine" onchange="render()">
-          <option value="">Both Lines</option>
+          <option value="">All Lines</option>
           <option value="Royal Caribbean">Royal Caribbean</option>
           <option value="Celebrity">Celebrity</option>
+          <option value="MSC">MSC Cruises</option>
+          <option value="Norwegian">Norwegian (NCL)</option>
+          <option value="Disney">Disney Cruise Line</option>
         </select>
       </div>
       <div class="filter-group">
@@ -301,6 +307,7 @@
           <option value="Cape Liberty">Cape Liberty, NJ</option>
           <option value="Boston">Boston, MA</option>
           <option value="New Orleans">New Orleans, LA</option>
+          <option value="Barcelona">Barcelona, Spain</option>
         </select>
       </div>
       <div class="filter-group">
@@ -386,7 +393,8 @@
     <strong>Value Score</strong> = weighted composite: Reviews 35% + Ship Age/Newness 25% + Kid Friendliness 20% + Price Competitiveness 20%.<br>
     <strong>Space Ratio</strong> = Gross Tonnage ÷ Passengers (double occupancy). Industry standard crowding metric — higher is less crowded. <span style="color:#059669;font-weight:600;">≥44 = spacious</span> · <span style="color:#1e6bb8;font-weight:600;">42–43 = comfortable</span> · <span style="color:#64748b;">below 42 = denser</span>.<br>
     <strong>Nightly rate</strong> is a per-person ballpark estimate (interior cabin, 2-person occupancy) — not an all-in cost. Add gratuities, packages, flights, and excursions for true total.<br>
-    <strong>✦ drive</strong> = Galveston or New Orleans homeport (drivable from Austin — ~3.5 hrs and ~5.5 hrs respectively). Celebrity has no Texas/Louisiana homeport.<br>
+    <strong>✦ drive</strong> = Galveston or New Orleans homeport (drivable from Austin — ~3.5 hrs and ~5.5 hrs respectively). Celebrity has no Texas/Louisiana homeport. MSC Seascape, Norwegian Viva, and Disney Magic all currently homeport in Galveston.<br>
+    <strong>Cross-line Value Score note:</strong> Value Score is calibrated primarily against RC/Celebrity data; use it directionally across MSC, NCL, and Disney — pricing models and bundling (NCL Free at Sea, Disney all-inclusive feel) differ materially from RC base-fare structure.<br>
     Data reflects 2026–2027 RC and Celebrity deployment schedules. Symphony relocates Galveston → Fort Lauderdale in 2027; Icon of the Seas arrives in Galveston Aug 2027 (sails from Miami until then); Liberty of the Seas joins Galveston after its Royal Amplified refit (late 2026 repositioning, full 2027 season). Allure of the Seas was only a temporary Mar–May 2026 Galveston stand-in and has since repositioned to Barcelona — not a standing Texas option. Celebrity Edge and Equinox are deployed outside North American Caribbean this season. Prices and itineraries subject to change.
   </div>
 </div>
@@ -418,6 +426,15 @@ const ships = [
   { name:"Celebrity Silhouette",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale","Cape Liberty"],    nights:"6–11", nightMin:6,  nightMax:11, review:8.7, launched:2011, kidScore:6,  priceNight:165, pax:2886, gt:122400, kidType:"adults", itin:"FLL (6n): Jamaica · Grand Cayman · Cozumel; FLL (8n): Aruba · Curaçao · Bonaire; CLB: Bermuda", notes:"Fort Lauderdale 6-8 night Caribbean (ABC Islands, Jamaica, Grand Cayman); Bermuda from Cape Liberty NJ" },
   { name:"Celebrity Reflection",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"3–4",  nightMin:3,  nightMax:4,  review:8.6, launched:2012, kidScore:6,  priceNight:160, pax:3046, gt:126000, kidType:"adults", itin:"CocoCay · Bimini · Nassau · Key West", notes:"Year-round 3-4 night weekend getaways from Fort Lauderdale; CocoCay, Bimini, Nassau, Key West" },
   { name:"Celebrity Equinox",        line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"7–14", nightMin:7,  nightMax:14, review:8.3, launched:2009, kidScore:5,  priceNight:145, pax:2850, gt:122400, kidType:"adults", itin:"Not in Caribbean this season", notes:"2026-27 deployed to South America/Antarctica + Mediterranean — not sailing Caribbean from Florida this season" },
+
+  // MSC Cruises
+  { name:"MSC Seascape",             line:"MSC",             cls:"Seaside EVO", ports:["Galveston"],                      nights:"7",    nightMin:7,  nightMax:7,  review:8.5, launched:2022, kidScore:7,  priceNight:130, pax:4540, gt:170412, kidType:"mixed",  itin:"7n Western Caribbean: Roatán · Costa Maya · Cozumel", notes:"Year-round from Galveston's new Terminal 16 (opened Nov 2025); $130M+ new MSC-funded terminal; European cruise style — quieter than RC, less kids entertainment saturation; MSC has kids clubs (baby/mini/junior/teen) but program depth below RC/Disney; strong value proposition for adults or mixed groups" },
+
+  // Norwegian Cruise Line
+  { name:"Norwegian Viva",           line:"Norwegian",       cls:"Prima",   ports:["Galveston"],                          nights:"7–14", nightMin:7,  nightMax:14, review:8.6, launched:2023, kidScore:6,  priceNight:160, pax:3215, gt:142500, kidType:"mixed",  itin:"7n: Cozumel · Costa Maya · Roatán · Harvest Caye; 14n: St. Thomas · Antigua · St. Maarten · San Juan · Puerto Plata · Grand Cayman · Cozumel · Great Stirrup Cay", notes:"Seasonal Galveston (Oct–Apr); NCL's second Prima-class ship (2023); go-kart speedway, 360° Ocean Boulevard promenade; 'Free at Sea' promo bundles drinks + dining credits — factor into cost comparison; adult-forward brand, kids programs available but not the focus" },
+
+  // Disney Cruise Line
+  { name:"Disney Magic",             line:"Disney",          cls:"Magic",   ports:["Galveston"],                          nights:"4–7",  nightMin:4,  nightMax:7,  review:9.0, launched:1998, kidScore:10, priceNight:290, pax:2400, gt:83000,  kidType:"family", itin:"Western Caribbean: Cozumel · Progreso (Mexico); Bahamian: Nassau · Castaway Cay (Disney private island)", notes:"Seasonal Galveston (Nov 2026–Apr 2027); 4-, 5-, 7-night sailings; oldest ship in this comparison (1998) — but Disney brand experience, character immersion, and kid-specific programming compensate; significantly higher price point than RC; a newer/larger Disney ship confirmed for Galveston year-round 2027" },
 ];
 
 function ageScore(y) {
@@ -486,8 +503,8 @@ function render() {
   }
 
   tbody.innerHTML = data.map(s => {
-    const lineBadge = s.line==='Royal Caribbean' ? 'badge-rc' : 'badge-cel';
-    const lineShort = s.line==='Royal Caribbean' ? 'RC' : 'Celebrity';
+    const lineBadge = s.line==='Royal Caribbean' ? 'badge-rc' : s.line==='Celebrity' ? 'badge-cel' : s.line==='MSC' ? 'badge-msc' : s.line==='Norwegian' ? 'badge-ncl' : 'badge-disney';
+    const lineShort = s.line==='Royal Caribbean' ? 'RC' : s.line==='Celebrity' ? 'Celebrity' : s.line==='Norwegian' ? 'NCL' : s.line;
     const kidBadge = s.kidType==='family' ? 'badge-family' : s.kidType==='adults' ? 'badge-adults' : 'badge-mixed';
     const kidLabel = s.kidType==='family' ? 'Family' : s.kidType==='adults' ? 'Adults' : 'Mixed';
     const vPct = Math.round((s.value/10)*100);
