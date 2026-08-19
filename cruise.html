@@ -7,121 +7,122 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f1f3f5;
+    /* Nautical palette — navy, gold, white, baby blue, cranberry. Sharp corners throughout. */
+    --paper: #f4f6f9;
     --surface: #ffffff;
-    --surface-alt: #e9ecef;
-    --teal: #0d9488;
-    --teal-light: #0f766e;
-    --gold: #b45309;
-    --gold-light: #92400e;
-    --text: #1e293b;
-    --muted: #64748b;
-    --border: #dee2e6;
-    --card: #ffffff;
-    --rc-blue: #1e6bb8;
-    --cel-purple: #7c3aed;
-    --green: #059669;
-    --amber: #d97706;
-    --red: #dc2626;
+    --surface-2: #eef1f6;
+    --ink: #0c2340;
+    --ink-2: #2d4a75;
+    --muted: #64738d;
+    --border: #d9dfe8;
+    --border-strong: #b9c4d4;
+    --gold: #a6791f;
+    --gold-deep: #7a5811;
+    --gold-pale: #f3e6c8;
+
+    /* Cruise-line identity — validated for adjacent CVD separation (dataviz skill),
+       always paired with a text label, never color alone. RC=navy, Celebrity=cranberry,
+       MSC=baby blue, Norwegian=gold, Disney=forest green (a 5th hue added beyond the
+       requested navy/gold/white/baby-blue/cranberry set, needed since 5 cruise lines
+       require 5 distinct identity colors and doubling up on navy or gold would blur it). */
+    --line-rc: #2454a0;
+    --line-ncl: #c1861f;
+    --line-cel: #9e2249;
+    --line-disney: #1f7a52;
+    --line-msc: #5a9fd4;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--paper);
+    color: var(--ink);
     min-height: 100vh;
   }
 
-  /* Header */
-  .hero {
-    background: linear-gradient(135deg, #1e3a5f 0%, #0d9488 100%);
-    padding: 3rem 2rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid var(--border);
+  /* Masthead — quiet, typographic, no gradient */
+  .masthead {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 1.75rem;
+    border-bottom: 2px solid var(--ink);
   }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(ellipse at 60% 40%, rgba(255,255,255,0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 30% 70%, rgba(245,158,11,0.08) 0%, transparent 50%);
-    pointer-events: none;
-  }
-  .hero-eyebrow {
+  .masthead-eyebrow {
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.75);
-    margin-bottom: 0.75rem;
+    color: var(--gold-deep);
+    margin-bottom: 0.6rem;
   }
-  .hero h1 {
+  .masthead h1 {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    color: #ffffff;
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
+    font-size: clamp(2.1rem, 5vw, 3.4rem);
+    color: var(--ink);
+    line-height: 1.05;
+    margin-bottom: 0.55rem;
   }
-  .hero h1 em {
-    font-style: italic;
-    color: #fcd34d;
+  .masthead h1 em { font-style: italic; color: var(--gold); }
+  .masthead-sub {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    margin-bottom: 1.1rem;
+    max-width: 640px;
   }
-  .hero-sub {
-    font-size: 15px;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 1.5rem;
+  .masthead-stats {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
   }
-  .hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-  .hero-stat {
-    text-align: center;
-  }
-  .hero-stat-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.75rem;
-    color: #ffffff;
-  }
-  .hero-stat-label {
-    font-size: 11px;
-    color: rgba(255,255,255,0.65);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
+  .masthead-stats b { color: var(--ink-2); font-weight: 600; }
+  .masthead-stats span.sep { margin: 0 0.6em; color: var(--border-strong); }
 
   /* Main content */
-  .main { max-width: 1440px; margin: 0 auto; padding: 1.5rem 1.25rem; }
+  .main { max-width: 1440px; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+
+  /* Loyalty strip — quiet personalization, not another loud card */
+  .loyalty-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 1.5rem;
+  }
+  .loyalty-block {
+    padding: 0.9rem 1.25rem;
+    border-left: 3px solid var(--line-rc);
+  }
+  .loyalty-block + .loyalty-block { border-left: 3px solid var(--line-cel); border-top: none; }
+  @media (max-width: 640px) {
+    .loyalty-strip { grid-template-columns: 1fr; }
+    .loyalty-block + .loyalty-block { border-top: 1px solid var(--border); }
+  }
+  .loyalty-line-1 { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.4rem; }
+  .loyalty-program { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .loyalty-tier { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--ink); }
+  .loyalty-progress-track { height: 4px; background: var(--gold-pale); width: 100%; margin-bottom: 0.35rem; }
+  .loyalty-progress-fill { height: 100%; background: var(--gold); }
+  .loyalty-detail { font-size: 11.5px; color: var(--ink-2); }
 
   /* Filters */
   .filters-section {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
+    padding: 1.4rem 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
   .filters-title {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--teal-light);
+    color: var(--gold-deep);
     margin-bottom: 1rem;
   }
   .filters-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 12px;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
   }
   .filter-group label {
     display: block;
@@ -134,38 +135,39 @@
   select {
     width: 100%;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
+    border: 1px solid var(--border-strong);
+    color: var(--ink);
     padding: 7px 10px;
     font-size: 13px;
     font-family: 'DM Sans', sans-serif;
     outline: none;
     cursor: pointer;
   }
-  select:focus { border-color: var(--teal); }
-  select option { background: #ffffff; color: var(--text); }
+  select:focus { border-color: var(--gold); }
+  select option { background: #ffffff; color: var(--ink); }
 
   .sort-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    padding-top: 0.9rem;
   }
-  .sort-label { font-size: 12px; color: var(--muted); }
+  .sort-label { font-size: 12px; color: var(--muted); margin-right: 6px; }
   .sort-btn {
     font-size: 12px;
     font-family: 'DM Sans', sans-serif;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
+    padding: 6px 11px;
+    border: 1px solid transparent;
+    border-bottom: 2px solid transparent;
     background: transparent;
-    color: var(--muted);
+    color: var(--ink-2);
     cursor: pointer;
     transition: all 0.15s;
   }
-  .sort-btn:hover { border-color: var(--teal); color: var(--text); }
-  .sort-btn.active { background: var(--teal); border-color: var(--teal); color: white; font-weight: 500; }
+  .sort-btn:hover { color: var(--ink); border-bottom-color: var(--border-strong); }
+  .sort-btn.active { color: var(--gold-deep); font-weight: 600; border-bottom-color: var(--gold); }
 
   /* Table */
   .table-header {
@@ -176,72 +178,59 @@
   }
   .results-count { font-size: 13px; color: var(--muted); }
 
-  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 960px; }
-  thead { background: var(--surface-alt); }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 1020px; }
+  thead { background: var(--surface-2); }
   th {
     text-align: left;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 600;
-    color: var(--muted);
+    color: var(--ink-2);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.07em;
+    padding: 11px 14px;
+    border-bottom: 2px solid var(--ink);
     cursor: pointer;
     white-space: nowrap;
     user-select: none;
     transition: color 0.15s;
   }
-  th:hover { color: var(--teal-light); }
-  td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text); }
+  th:hover { color: var(--gold-deep); }
+  td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--ink); font-variant-numeric: tabular-nums; }
   tr:last-child td { border-bottom: none; }
-  tbody tr { background: var(--card); transition: background 0.15s; }
-  tbody tr:nth-child(even) { background: #f8f9fa; }
-  tbody tr:hover { background: rgba(13,148,136,0.06); }
+  tbody tr.data-row { background: var(--surface); transition: background 0.15s; }
+  tbody tr.data-row:nth-child(4n+3) { background: var(--paper); }
+  tbody tr.data-row:hover { background: var(--gold-pale); }
 
-  /* Badges */
-  .badge {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .badge-rc { background: rgba(30,107,184,0.12); color: #1e6bb8; border: 1px solid rgba(30,107,184,0.25); }
-  .badge-cel { background: rgba(124,58,237,0.12); color: #7c3aed; border: 1px solid rgba(124,58,237,0.25); }
-  .badge-msc { background: rgba(15,118,110,0.12); color: #0f766e; border: 1px solid rgba(15,118,110,0.25); }
-  .badge-ncl { background: rgba(220,38,38,0.12); color: #dc2626; border: 1px solid rgba(220,38,38,0.25); }
-  .badge-disney { background: rgba(37,99,235,0.12); color: #2563eb; border: 1px solid rgba(37,99,235,0.25); }
-  .badge-family { background: rgba(5,150,105,0.1); color: #059669; border: 1px solid rgba(5,150,105,0.25); }
-  .badge-adults { background: rgba(217,119,6,0.1); color: #d97706; border: 1px solid rgba(217,119,6,0.25); }
-  .badge-mixed { background: rgba(100,116,139,0.1); color: #475569; border: 1px solid rgba(100,116,139,0.25); }
-  .tag { font-size: 11px; color: var(--muted); background: var(--surface-alt); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); }
-  .drive-tag { font-size: 11px; color: var(--teal-light); margin-left: 4px; }
+  /* Line + kid-type identity — small square swatch + text, never color alone */
+  .line-id { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12.5px; font-weight: 500; }
+  .line-swatch { width: 9px; height: 9px; flex: none; display: inline-block; }
+  .kid-tag { font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border: 1px solid var(--border-strong); color: var(--ink-2); }
+  .tag { font-size: 11px; color: var(--ink-2); background: var(--surface-2); padding: 2px 7px; border: 1px solid var(--border); }
+  .sailed-mark { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold-deep); background: var(--gold-pale); padding: 2px 6px; margin-left: 6px; white-space: nowrap; }
+  .drive-tag { font-size: 11px; color: var(--gold-deep); margin-left: 4px; }
+  .price-total { display: block; font-size: 10.5px; color: var(--muted); margin-top: 1px; }
 
-  /* Score bar */
-  .score-wrap { display: flex; align-items: center; gap: 8px; }
-  .score-bar { width: 50px; height: 5px; background: #dee2e6; border-radius: 3px; }
-  .score-fill { height: 100%; border-radius: 3px; }
-  .score-num { font-weight: 600; font-size: 14px; }
+  /* Value score — the hero metric: sequential single-hue bar, bigger figure */
+  .score-wrap { display: flex; align-items: center; gap: 9px; }
+  .score-bar { width: 56px; height: 5px; background: var(--gold-pale); flex: none; }
+  .score-fill { height: 100%; background: var(--gold); }
+  .score-num { font-weight: 600; font-size: 15px; color: var(--gold-deep); font-family: 'DM Serif Display', serif; }
 
   /* Year colors */
-  .year-new { color: #059669; font-weight: 500; }
-  .year-mid { color: #1e6bb8; }
+  .year-new { color: var(--gold-deep); font-weight: 500; }
+  .year-mid { color: var(--ink-2); }
   .year-old { color: var(--muted); }
 
-  /* Notes tooltip */
+  /* Detail / notes panel */
   tr.data-row { cursor: pointer; }
   tr.detail-row td { padding: 0; border-bottom: 1px solid var(--border); }
-  tr.detail-row .detail-panel { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 1rem 1.5rem 1.25rem; background: rgba(30,107,184,0.03); }
+  tr.detail-row .detail-panel { display: none; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 1rem 1.5rem 1.25rem; background: var(--gold-pale); border-left: 3px solid var(--gold); }
   tr.detail-row.open .detail-panel { display: grid; }
-  .detail-label { font-size: 11px; font-weight: 700; color: #1e6bb8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem; }
-  .detail-text { font-size: 12px; color: var(--text); line-height: 1.7; }
-  .expand-cell { width: 28px; text-align: center; color: #94a3b8; font-size: 14px; transition: transform 0.2s; user-select: none; }
-  tr.data-row.open .expand-cell { transform: rotate(90deg); color: #1e6bb8; }
+  .detail-label { font-size: 11px; font-weight: 700; color: var(--gold-deep); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.375rem; }
+  .detail-text { font-size: 12px; color: var(--ink); line-height: 1.7; }
+  .expand-cell { width: 24px; text-align: center; color: var(--muted); font-size: 14px; transition: transform 0.2s; user-select: none; }
+  tr.data-row.open .expand-cell { transform: rotate(90deg); color: var(--gold-deep); }
 
   /* Footer */
   .footnote {
@@ -249,13 +238,11 @@
     padding: 1rem 1.25rem;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
     font-size: 12px;
-    color: var(--muted);
+    color: var(--ink-2);
     line-height: 1.7;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
-  .footnote strong { color: var(--text); font-weight: 600; }
+  .footnote strong { color: var(--ink); font-weight: 600; }
 
   .footer-bar {
     text-align: center;
@@ -266,27 +253,86 @@
     margin-top: 2rem;
   }
 
-  @media (max-width: 600px) {
-    .hero { padding: 2rem 1rem 1.5rem; }
-    .main { padding: 1rem; }
+  /* ---------------------------------------------------------------
+     Mobile: table becomes stacked cards. Same DOM, no JS branching —
+     each td gets its column label from data-label via ::before.
+  --------------------------------------------------------------- */
+  @media (max-width: 760px) {
+    .masthead { padding: 2.25rem 1.1rem 1.5rem; }
+    .main { padding: 1.1rem 1rem 0; }
     .filters-grid { grid-template-columns: 1fr 1fr; }
+
+    .table-wrap { overflow-x: visible; border: none; }
+    table { min-width: 0; }
+    thead { display: none; }
+    tbody { display: block; }
+
+    tr.data-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 10px;
+      row-gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      padding: 12px 12px 12px 14px;
+      border-left: 3px solid var(--border-strong);
+    }
+    tr.data-row td { display: block; padding: 0; border-bottom: none; }
+    tr.data-row td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    /* ship name spans full width, first */
+    td[data-col="name"] { grid-column: 1 / -1; order: -3; }
+    td[data-col="line"] { grid-column: 1 / -1; order: -2; }
+    td[data-col="value"] { grid-row: 1 / 4; grid-column: 2; text-align: right; order: -4; align-self: start; }
+    td[data-col="port"] { order: -1; }
+    td[data-col="nights"], td[data-col="pax"], td[data-col="space"] { display: none; }
+    td[data-col="review"], td[data-col="age"], td[data-col="kids"], td[data-col="price"] { }
+    .expand-cell { display: none; }
+
+    tr.detail-row { display: block; margin-top: -12px; margin-bottom: 10px; }
+    tr.detail-row td { padding: 0; }
+    tr.detail-row .detail-panel { grid-template-columns: 1fr; border-left: 3px solid var(--gold); }
   }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-eyebrow">McKinstrie Family</div>
+<div class="masthead">
+  <div class="masthead-eyebrow">McKinstrie Family</div>
   <h1>Cruise <em>Planner</em></h1>
-  <p class="hero-sub">Royal Caribbean · Celebrity · MSC · Norwegian · Disney — ranked by value, reviews, and family fit</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-num">26</div><div class="hero-stat-label">Ships Rated</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Home Ports</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">2026–27</div><div class="hero-stat-label">Season</div></div>
-  </div>
+  <p class="masthead-sub">Royal Caribbean · Celebrity · MSC · Norwegian · Disney — ranked by value, reviews, and family fit for a 4–5 year old.</p>
+  <div class="masthead-stats"><b>26</b> ships rated <span class="sep">·</span><b>7</b> home ports <span class="sep">·</span><b>2026–27</b> season</div>
 </div>
 
 <div class="main">
+
+  <div class="loyalty-strip">
+    <div class="loyalty-block">
+      <div class="loyalty-line-1">
+        <span class="loyalty-program">Crown &amp; Anchor Society</span>
+        <span class="loyalty-tier">Gold</span>
+      </div>
+      <div class="loyalty-progress-track"><div class="loyalty-progress-fill" style="width:0%;"></div></div>
+      <div class="loyalty-detail">0 of 30 points to Platinum &mdash; points from the Mariner sailing were moved to Celebrity via Crown &amp; Anchor Choice</div>
+    </div>
+    <div class="loyalty-block">
+      <div class="loyalty-line-1">
+        <span class="loyalty-program">Captain's Club</span>
+        <span class="loyalty-tier">Classic</span>
+      </div>
+      <div class="loyalty-progress-track"><div class="loyalty-progress-fill" style="width:24%;"></div></div>
+      <div class="loyalty-detail">36 of 150 points to Select &mdash; 21 from Alaska (Edge) + 15 transferred from Mariner</div>
+    </div>
+  </div>
 
   <div class="filters-section">
     <div class="filters-title">Filter &amp; Sort</div>
@@ -397,15 +443,16 @@
   <div class="footnote">
     <strong>Value Score</strong> = weighted composite: Reviews 35% + Ship Age/Newness 25% + Kid Friendliness 20% + Price Competitiveness 20%.<br>
     <strong>Review score methodology (updated Aug 19, 2026):</strong> computed from each ship's actual Cruise Critic guest review-count breakdown (Excellent/Very Good/Average/Poor/Terrible), weighted 5-4-3-2-1 and doubled to a /10 scale — <em>not</em> Cruise Critic's "Editor Rating" badge, which independent spot-checks showed runs meaningfully higher than actual guest sentiment on several ships (most dramatically MSC Seascape and Norwegian Viva, both of which have unusually polarized review distributions). Mariner of the Seas uses the family's own May 2026 Cruise Critic-equivalent rating (4.3/5) instead of the fleet aggregate. Small-sample ships (e.g. Star of the Seas, still building review volume) are lower-confidence.<br>
-    <strong>Space Ratio</strong> = Gross Tonnage ÷ Passengers (double occupancy). Industry standard crowding metric — higher is less crowded. <span style="color:#059669;font-weight:600;">≥44 = spacious</span> · <span style="color:#1e6bb8;font-weight:600;">42–43 = comfortable</span> · <span style="color:#64748b;">below 42 = denser</span>.<br>
-    <strong>Nightly rate</strong> is a per-person ballpark estimate (interior cabin, 2-person occupancy, pulled from live 2026-27 sailing listings) — not an all-in cost. Add ~$18.50/person/day gratuities, packages (this family typically spends ~$1,650 on priority access + beverage + dining for a 5-night sailing), flights, and excursions for true total.<br>
+    <strong>Space Ratio</strong> = Gross Tonnage ÷ Passengers (double occupancy). Industry standard crowding metric — higher is less crowded. <span style="color:#5a9fd4;font-weight:600;">≥44 = spacious</span> · <span style="color:#2454a0;font-weight:600;">42–43 = comfortable</span> · <span style="color:#64738d;">below 42 = denser</span>.<br>
+    <strong>Nightly rate</strong> is a per-person ballpark estimate (interior cabin, 2-person occupancy, pulled from live 2026-27 sailing listings). The smaller line beneath it is an <strong>all-in estimate</strong> for the family's typical pattern — base fare for 2 adults at the ship's shortest advertised sailing length, plus standard $18.50/person/day gratuities for all 3 travelers — it still excludes packages (this family typically adds ~$1,650 on priority access + beverage + dining for a 5-night sailing), flights, and excursions.<br>
     <strong>✦ drive</strong> = Galveston or New Orleans homeport (drivable from Austin — ~3.5 hrs and ~5.5 hrs respectively). Celebrity has no Texas/Louisiana homeport. MSC Seascape, Norwegian Viva, and Disney Magic all currently homeport in Galveston.<br>
+    <strong>Sailed</strong> marks a ship the family has direct experience with (Mariner of the Seas, May 2026; Celebrity Edge, Jul 2025) — see the notes panel for the real trip writeup.<br>
     <strong>Cross-line Value Score note:</strong> Value Score is calibrated primarily against RC/Celebrity data; use it directionally across MSC, NCL, and Disney — pricing models and bundling (NCL Free at Sea, Disney all-inclusive feel) differ materially from RC base-fare structure.<br>
     Data reflects 2026–2027 RC and Celebrity deployment schedules, refreshed Aug 19 2026. Symphony relocates Galveston → Fort Lauderdale in 2027; Icon of the Seas begins Galveston sailings Aug 16, 2027 (sails from Miami until then) — RC's Texas presence grows to three ships (Mariner, Liberty, Icon) plus MSC, Norwegian, and Disney. Liberty of the Seas returns via a mid-Oct 2026 transatlantic repositioning from London, then sails Galveston Western Caribbean. Mariner of the Seas — the ship the family sailed May 2026 — leaves Galveston for New Orleans Nov 1, 2026, then repositions to the Mediterranean/transatlantic for summer 2027 before returning to New Orleans. Allure of the Seas was only a temporary Mar–May 2026 Galveston stand-in — confirmed back in year-round Caribbean service from Fort Lauderdale/Miami for 2027, not a lasting Barcelona ship as earlier assumed here. Celebrity Edge and Equinox are deployed outside North American Caribbean this season (Alaska/Australia-NZ, and South America/Antarctica/Mediterranean respectively) — Equinox's price reflects that non-Caribbean pricing, not a budget option. Prices and itineraries subject to change; nightly-rate and review figures are point-in-time snapshots, not live quotes.
   </div>
 </div>
 
-<div class="footer-bar">McKinstrie Family Cruise Planner · Built June 2026 · Data refreshed Aug 19, 2026</div>
+<div class="footer-bar">McKinstrie Family Cruise Planner · Built June 2026 · Data refreshed &amp; redesigned Aug 19, 2026</div>
 
 <script>
 const ships = [
@@ -421,13 +468,13 @@ const ships = [
   { name:"Liberty of the Seas",      line:"Royal Caribbean", cls:"Freedom",  ports:["Galveston","Fort Lauderdale"],      nights:"4–5",  nightMin:4,  nightMax:5,  review:8.0, launched:2007, kidScore:9,  priceNight:140, pax:3634, gt:154407, kidType:"family", itin:"4n: Cozumel; 5n: Costa Maya · Cozumel", notes:"Royal Amplified 2026; Galveston from Oct 2026 through 2028+; 4-5 night Cozumel/Costa Maya" },
   { name:"Independence of the Seas", line:"Royal Caribbean", cls:"Freedom",  ports:["Miami","Cape Liberty"],             nights:"4–9",  nightMin:4,  nightMax:9,  review:7.7, launched:2008, kidScore:7,  priceNight:120, pax:3634, gt:154407, kidType:"family", itin:"MIA: Eastern & Western Caribbean; CLB: Bermuda · Canada/New England", notes:"Miami 7-night Caribbean winter/spring; Cape Liberty 4-5-9 night Bermuda/Canada/Caribbean summer" },
   { name:"Adventure of the Seas",    line:"Royal Caribbean", cls:"Voyager",  ports:["Port Canaveral","Fort Lauderdale"], nights:"6–8",  nightMin:6,  nightMax:8,  review:7.9, launched:2001, kidScore:7,  priceNight:95, pax:3114, gt:137276, kidType:"family", itin:"Western (6n): Falmouth · Grand Cayman; Eastern (8n): San Juan · St. Thomas · St. Croix; Southern (8n): Aruba · Curaçao", notes:"Port Canaveral 6-8 night Caribbean most of 2026; repositions to Fort Lauderdale late year" },
-  { name:"Mariner of the Seas",      line:"Royal Caribbean", cls:"Voyager",  ports:["Galveston","New Orleans","Barcelona"], nights:"4–18", nightMin:4,  nightMax:18, review:8.6, launched:2003, kidScore:7,  priceNight:135, pax:3344, gt:139863, kidType:"family", itin:"GAL (through Oct 2026, 4-5-7n): Costa Maya · Cozumel; NOL (Nov 2026–Apr 2027, 6-7-8n): Cozumel · Grand Cayman · Falmouth · Belize City; repositions to the Med Apr–Oct 2027 — transatlantic (14-18n) plus 7n Barcelona sailings to Spain/Morocco, then returns to New Orleans by Oct 2027", notes:"The family sailed this ship — 5-night Western Caribbean out of Galveston, May 25, 2026 (res #7887714, stateroom 8262, category 5D); earned Crown & Anchor Gold-track points toward Platinum (30 needed). Big change since: Mariner leaves Galveston for New Orleans Nov 1, 2026, then spends summer 2027 in the Mediterranean before returning to New Orleans — no longer a pure Texas drive-port ship year-round" },
+  { name:"Mariner of the Seas",      line:"Royal Caribbean", cls:"Voyager",  ports:["Galveston","New Orleans","Barcelona"], nights:"4–18", nightMin:4,  nightMax:18, review:8.6, launched:2003, kidScore:7,  priceNight:135, pax:3344, gt:139863, kidType:"family", sailed:true, itin:"GAL (through Oct 2026, 4-5-7n): Costa Maya · Cozumel; NOL (Nov 2026–Apr 2027, 6-7-8n): Cozumel · Grand Cayman · Falmouth · Belize City; repositions to the Med Apr–Oct 2027 — transatlantic (14-18n) plus 7n Barcelona sailings to Spain/Morocco, then returns to New Orleans by Oct 2027", notes:"The family sailed this ship — 5-night Western Caribbean out of Galveston, May 25, 2026 (res #7887714, stateroom 8262, category 5D); earned Crown & Anchor Gold-track points, later transferred to Celebrity Captain's Club via Crown & Anchor Choice. Big change since: Mariner leaves Galveston for New Orleans Nov 1, 2026, then spends summer 2027 in the Mediterranean before returning to New Orleans — no longer a pure Texas drive-port ship year-round" },
   { name:"Explorer of the Seas",     line:"Royal Caribbean", cls:"Voyager",  ports:["Port Canaveral"],                    nights:"4–5",  nightMin:4,  nightMax:5,  review:7.9, launched:2000, kidScore:7,  priceNight:155, pax:3114, gt:137308, kidType:"mixed",  itin:"4n: Nassau · CocoCay; 5n: Nassau · Cozumel", notes:"Port Canaveral 4-5 night Bahamas/Caribbean; also sails Mediterranean from Ravenna mid-year; flight required. Got a 2019 amplification (Perfect Storm slides, FlowRider) so it no longer trails its Voyager-class sisters on family infrastructure — kid score raised accordingly" },
   { name:"Celebrity Xcel",           line:"Celebrity",       cls:"Edge",    ports:["Miami"],                             nights:"7",    nightMin:7,  nightMax:7,  review:8.3, launched:2025, kidScore:5,  priceNight:195, pax:3260, gt:140600, kidType:"adults", itin:"Eastern: St. Thomas · Antigua · Nassau; Western: Cozumel · Grand Cayman · Bimini; Southern: Aruba · Bonaire · Curaçao", notes:"Newest Celebrity 2025; Miami homeport Nov 2026–Apr 2027; Mediterranean summer 2026; best entertainment in fleet" },
   { name:"Celebrity Beyond",         line:"Celebrity",       cls:"Edge",    ports:["Miami","Fort Lauderdale"],           nights:"7",    nightMin:7,  nightMax:7,  review:7.6, launched:2022, kidScore:5,  priceNight:170, pax:3260, gt:140600, kidType:"adults", itin:"ABC Islands: Aruba · Bonaire · Curaçao; Eastern: BVI · St. Kitts · Puerto Plata · Grand Turk", notes:"Year-round Miami/Fort Lauderdale; 7-night Caribbean; Rooftop Garden; outstanding dining" },
   { name:"Celebrity Ascent",         line:"Celebrity",       cls:"Edge",    ports:["Fort Lauderdale"],                   nights:"10–11",nightMin:10, nightMax:11, review:8.3, launched:2023, kidScore:5,  priceNight:205, pax:3260, gt:140600, kidType:"adults", itin:"Southern (10n): Tortola · Antigua · Barbados · St. Lucia · St. Kitts; Panama Canal (11n): Cartagena · Colón · Aruba · Bonaire", notes:"Fort Lauderdale 10-11 night Southern Caribbean and Panama Canal; longest Celebrity Caribbean itineraries" },
   { name:"Celebrity Apex",           line:"Celebrity",       cls:"Edge",    ports:["Port Canaveral"],                    nights:"4–7",  nightMin:4,  nightMax:7,  review:7.9, launched:2021, kidScore:5,  priceNight:185, pax:2910, gt:130818, kidType:"adults", itin:"Key West · Nassau · Bimini · Grand Turk · Puerto Plata · St. Thomas", notes:"Port Canaveral homeport (returns Oct 2026); 4- and 7-night Key West & Bahamas; Eden restaurant standout" },
-  { name:"Celebrity Edge",           line:"Celebrity",       cls:"Edge",    ports:["Fort Lauderdale","Miami"],           nights:"7",    nightMin:7,  nightMax:7,  review:7.6, launched:2018, kidScore:5,  priceNight:210, pax:2918, gt:130818, kidType:"adults", itin:"Not in Caribbean this season", notes:"2026-27 deployed to Alaska + Australia/NZ — not sailing Caribbean from Florida this season" },
+  { name:"Celebrity Edge",           line:"Celebrity",       cls:"Edge",    ports:["Fort Lauderdale","Miami"],           nights:"7",    nightMin:7,  nightMax:7,  review:7.6, launched:2018, kidScore:5,  priceNight:210, pax:2918, gt:130818, kidType:"adults", sailed:true, itin:"Not in Caribbean this season", notes:"2026-27 deployed to Alaska + Australia/NZ — not sailing Caribbean from Florida this season. The family sailed this ship — 7-night Alaska Dawes Glacier cruise, Seattle round-trip, Jul 25–Aug 1 2025 (res #8700413, cabin 8113). Strongly positive experience: Eden, Magic Carpet, Fine Cut Steakhouse, Le Petit Chef were highlights." },
   { name:"Celebrity Eclipse",        line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"9–12", nightMin:9,  nightMax:12, review:8.5, launched:2010, kidScore:5,  priceNight:125, pax:2850, gt:122000, kidType:"adults", itin:"Eastern (8n): Antigua · St. Maarten · San Juan · Puerto Plata; Western (6n): Grand Cayman · Cozumel · Nassau; Southern (12n): Full Southern Caribbean", notes:"Fort Lauderdale 9-12 night Caribbean; ABC Islands, Jamaica, Grand Cayman, Mexico; longest standard Celebrity itineraries from Florida" },
   { name:"Celebrity Silhouette",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale","Cape Liberty"],    nights:"6–11", nightMin:6,  nightMax:11, review:8.2, launched:2011, kidScore:6,  priceNight:140, pax:2886, gt:122400, kidType:"adults", itin:"FLL (6n): Jamaica · Grand Cayman · Cozumel; FLL (8n): Aruba · Curaçao · Bonaire; CLB: Bermuda", notes:"Fort Lauderdale 6-8 night Caribbean (ABC Islands, Jamaica, Grand Cayman); Bermuda from Cape Liberty NJ" },
   { name:"Celebrity Reflection",     line:"Celebrity",       cls:"Solstice",ports:["Fort Lauderdale"],                   nights:"3–4",  nightMin:3,  nightMax:4,  review:8.4, launched:2012, kidScore:6,  priceNight:145, pax:3046, gt:126000, kidType:"adults", itin:"CocoCay · Bimini · Nassau · Key West", notes:"Year-round 3-4 night weekend getaways from Fort Lauderdale; CocoCay, Bimini, Nassau, Key West" },
@@ -455,7 +502,17 @@ function priceScore(p) {
 function computeValue(s) {
   return parseFloat(((s.review * 0.35) + (ageScore(s.launched) * 0.25) + (s.kidScore * 0.20) + (priceScore(s.priceNight) * 0.20)).toFixed(2));
 }
-const allShips = ships.map(s => ({...s, value: computeValue(s), spaceRatio: parseFloat((s.gt / s.pax).toFixed(1))}));
+// All-in ballpark: 2 adults at the shortest advertised sailing length, plus standard
+// $18.50/person/day gratuities for all 3 travelers. Excludes packages/flights/excursions.
+function allInEstimate(s) {
+  const baseFare = s.nightMin * s.priceNight * 2;
+  const gratuities = Math.round(18.5 * s.nightMin * 3);
+  return Math.round((baseFare + gratuities) / 10) * 10;
+}
+const allShips = ships.map(s => ({...s, value: computeValue(s), spaceRatio: parseFloat((s.gt / s.pax).toFixed(1)), allIn: allInEstimate(s)}));
+
+const LINE_COLOR = { "Royal Caribbean": "var(--line-rc)", "Celebrity": "var(--line-cel)", "MSC": "var(--line-msc)", "Norwegian": "var(--line-ncl)", "Disney": "var(--line-disney)" };
+const LINE_SHORT = { "Royal Caribbean": "RC", "Celebrity": "Celebrity", "Norwegian": "NCL" };
 
 let sortKey = 'value', sortDir = -1;
 
@@ -504,37 +561,35 @@ function render() {
 
   const tbody = document.getElementById('tbody');
   if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:#64748b;padding:2rem;background:#fff;">No ships match these filters</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:#64738d;padding:2rem;background:#ffffff;">No ships match these filters</td></tr>';
     return;
   }
 
   tbody.innerHTML = data.map(s => {
-    const lineBadge = s.line==='Royal Caribbean' ? 'badge-rc' : s.line==='Celebrity' ? 'badge-cel' : s.line==='MSC' ? 'badge-msc' : s.line==='Norwegian' ? 'badge-ncl' : 'badge-disney';
-    const lineShort = s.line==='Royal Caribbean' ? 'RC' : s.line==='Celebrity' ? 'Celebrity' : s.line==='Norwegian' ? 'NCL' : s.line;
-    const kidBadge = s.kidType==='family' ? 'badge-family' : s.kidType==='adults' ? 'badge-adults' : 'badge-mixed';
+    const lineColor = LINE_COLOR[s.line];
+    const lineShort = LINE_SHORT[s.line] || s.line;
     const kidLabel = s.kidType==='family' ? 'Family' : s.kidType==='adults' ? 'Adults' : 'Mixed';
     const vPct = Math.round((s.value/10)*100);
-    const vColor = s.value>=8.5 ? '#10b981' : s.value>=7.5 ? '#f59e0b' : '#ef4444';
     const portStr = s.ports.slice(0,2).join(', ') + (s.ports.length>2 ? ' +1' : '');
     const driveMark = s.ports.includes('Galveston') ? '<span class="drive-tag" title="Drive from Austin">✦</span>' : '';
+    const sailedMark = s.sailed ? '<span class="sailed-mark" title="The family has sailed this ship">Sailed</span>' : '';
     const yearClass = s.launched>=2022 ? 'year-new' : s.launched>=2015 ? 'year-mid' : 'year-old';
-    const idx = Math.random().toString(36).slice(2);
     return `<tr class="data-row" onclick="toggleDetail(this)">
-      <td style="font-weight:500;white-space:nowrap;">${s.name}</td>
-      <td><span class="badge ${lineBadge}">${lineShort}</span></td>
-      <td><span class="tag">${s.cls}</span></td>
-      <td style="font-size:12px;white-space:nowrap;">${portStr}${driveMark}</td>
-      <td style="color:#64748b;font-size:12px;">${s.nights}n</td>
-      <td style="color:#64748b;font-size:12px;">${s.pax.toLocaleString()}</td>
-      <td style="font-size:12px;font-weight:500;color:${s.spaceRatio>=44?'#059669':s.spaceRatio>=42?'#1e6bb8':'#64748b'};">${s.spaceRatio}</td>
-      <td style="font-weight:600;">${s.review.toFixed(1)}</td>
-      <td><span class="${yearClass}">${s.launched}</span></td>
-      <td><span class="badge ${kidBadge}">${kidLabel}</span> <span style="font-size:11px;color:#64748b;">${s.kidScore}/10</span></td>
-      <td style="color:#64748b;font-size:12px;">~$${s.priceNight}</td>
-      <td>
+      <td data-col="name" style="font-weight:500;">${s.name}${sailedMark}</td>
+      <td data-col="line" data-label="Line"><span class="line-id"><span class="line-swatch" style="background:${lineColor};"></span>${lineShort}</span></td>
+      <td data-col="class" data-label="Class"><span class="tag">${s.cls}</span></td>
+      <td data-col="port" data-label="Port(s)" style="font-size:12px;white-space:nowrap;">${portStr}${driveMark}</td>
+      <td data-col="nights" data-label="Nights" style="color:var(--ink-2);font-size:12px;">${s.nights}n</td>
+      <td data-col="pax" data-label="Pax" style="color:var(--ink-2);font-size:12px;">${s.pax.toLocaleString()}</td>
+      <td data-col="space" data-label="Space Ratio" style="font-size:12px;font-weight:500;color:${s.spaceRatio>=44?'var(--line-msc)':s.spaceRatio>=42?'var(--line-rc)':'var(--muted)'};">${s.spaceRatio}</td>
+      <td data-col="review" data-label="Review" style="font-weight:600;">${s.review.toFixed(1)}</td>
+      <td data-col="age" data-label="Year"><span class="${yearClass}">${s.launched}</span></td>
+      <td data-col="kids" data-label="Kid Score"><span class="kid-tag">${kidLabel}</span> <span style="font-size:11px;color:var(--muted);">${s.kidScore}/10</span></td>
+      <td data-col="price" data-label="~/Night, All-In Est." style="color:var(--ink-2);font-size:12px;">~$${s.priceNight}<span class="price-total">~$${s.allIn.toLocaleString()} total*</span></td>
+      <td data-col="value" data-label="Value Score">
         <div class="score-wrap">
-          <div class="score-bar"><div class="score-fill" style="width:${vPct}%;background:${vColor};"></div></div>
-          <span class="score-num" style="color:${vColor};">${s.value.toFixed(1)}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${vPct}%;"></div></div>
+          <span class="score-num">${s.value.toFixed(1)}</span>
         </div>
       </td>
       <td class="expand-cell">›</td>
@@ -558,7 +613,6 @@ function render() {
 
 function toggleDetail(row) {
   const detailRow = row.nextElementSibling;
-  const isOpen = detailRow.classList.contains('open');
   detailRow.classList.toggle('open');
   row.classList.toggle('open');
 }
